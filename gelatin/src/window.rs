@@ -13,6 +13,7 @@ use glium::{
         dpi::{PhysicalPosition, PhysicalSize},
         event::WindowEvent,
         window::{CursorIcon, Icon, WindowId},
+        platform::unix::WindowBuilderExtUnix,
     },
     program, uniform, Blend, BlendingFunction, Display, Frame, IndexBuffer,
     Program, Rect, Surface, VertexBuffer,
@@ -136,6 +137,7 @@ impl Window {
         let window = glutin::window::WindowBuilder::new()
             .with_title("Loading")
             .with_fullscreen(None)
+            .with_name("alloy", "alloy")
             .with_inner_size(desc.size)
             .with_window_icon(desc.icon)
             .with_visible(desc.position.is_none());
