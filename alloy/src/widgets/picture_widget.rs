@@ -349,6 +349,7 @@ impl PictureWidgetData {
         window: &Window,
         playback_state: PlaybackState,
         file_path: &Option<PathBuf>,
+        texture: &Option<AnimationFrameTexture>
     ) {
         let playback = match playback_state {
             PlaybackState::Forward => " : Playing",
@@ -360,11 +361,16 @@ impl PictureWidgetData {
         let config = self.configuration.borrow();
         let title_config = config.title.clone().unwrap_or_default();
 
+        let size_info = match texture {
+            Some(texture) => format!("[{}x{}]", texture.w, texture.h),
+            None => "".into()
+        };
+
         let name = match file_path {
             Some(file_path) => title_config.format_file_path(file_path),
             None => "[ none ]".into(),
         };
-        let title = format!("{name}{playback}");
+        let title = format!("{name} {playback} {size_info}");
         window.set_title(title);
     }
 
@@ -760,6 +766,7 @@ impl Widget for PictureWidget {
             window,
             playback_state,
             data.playback_manager.shown_file_path(),
+            &new_texture
         );
         if prev_texture.is_none() != new_texture.is_none() {
             data.render_validity.invalidate();
